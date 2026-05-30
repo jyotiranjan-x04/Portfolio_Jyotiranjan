@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="600" viewBox="0 0 400 600" fill="none">
+  <rect width="400" height="600" fill="#111111"/>
+  <rect x="18" y="18" width="364" height="564" rx="24" fill="#18181B" stroke="#EAB308" stroke-opacity="0.5"/>
+  <circle cx="200" cy="230" r="58" fill="#EAB308" fill-opacity="0.2" stroke="#EAB308"/>
+  <path d="M130 355h140" stroke="#A1A1AA" stroke-width="8" stroke-linecap="round"/>
+  <path d="M110 395h180" stroke="#71717A" stroke-width="8" stroke-linecap="round"/>
+  <text x="50%" y="76%" text-anchor="middle" fill="#F4F4F5" font-family="Arial, sans-serif" font-size="24" font-weight="700">Image Not Found</text>
+</svg>
