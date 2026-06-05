@@ -4,24 +4,37 @@ import { GitBranch, UserRound } from "lucide-react";
 
 import { InstagramBrandIcon } from "@/components/ui/icons/instagram-brand-icon";
 import { portfolioData } from "@/data/portfolio";
+import { motion } from "framer-motion";
 
 export function AboutSpotlight() {
   return (
     <section className="space-y-3">
       <p className="text-sm uppercase tracking-[0.18em] text-zinc-400">More About Me</p>
-      <div className="grid gap-8 rounded-3xl border border-zinc-800 bg-zinc-950/70 p-4 sm:p-6 lg:grid-cols-[420px_1fr] lg:items-center">
-        <div className="overflow-hidden rounded-3xl border-2 border-fuchsia-500/80 bg-black">
+      <div className="relative z-10 grid gap-8 rounded-3xl border border-zinc-800 bg-zinc-950/70 p-4 sm:p-6 lg:grid-cols-[420px_1fr] lg:items-center">
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, margin: "-100px" }}
+          transition={{ duration: 0.6 }}
+          className="relative z-20 overflow-hidden rounded-3xl border-2 border-fuchsia-500/80 bg-black"
+        >
           <Image
-            src="/assets/profile/informal-pic.jpg"
+            src="/assets/profile-new.png"
             alt="Informal portrait of Jyotiranjan Sahoo"
             width={900}
             height={1200}
             className="h-full w-full object-cover"
             priority={false}
           />
-        </div>
+        </motion.div>
 
-        <div className="space-y-5">
+        <motion.div 
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: false, margin: "-100px" }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="space-y-5"
+        >
           <h2 className="text-4xl font-extrabold leading-tight text-white md:text-6xl">
             Hi there! I&apos;m <span className="bg-gradient-to-r from-violet-500 to-fuchsia-400 bg-clip-text text-transparent">Jyotiranjan</span>
           </h2>
@@ -35,9 +48,7 @@ export function AboutSpotlight() {
           </div>
 
           <div className="flex items-center gap-4 pt-1 text-zinc-300">
-            <Link href={portfolioData.socials.linkedin} aria-label="LinkedIn" className="transition-colors hover:text-yellow-300">
-              <UserRound className="h-7 w-7" />
-            </Link>
+
             <Link href={portfolioData.socials.github} aria-label="GitHub" className="transition-colors hover:text-yellow-300">
               <GitBranch className="h-7 w-7" />
             </Link>
@@ -45,7 +56,7 @@ export function AboutSpotlight() {
               <InstagramBrandIcon className="h-7 w-7" />
             </Link>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

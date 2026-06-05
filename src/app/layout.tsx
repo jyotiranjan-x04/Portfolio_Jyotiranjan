@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Preloader } from "@/components/preloader";
+import { FloatingContact } from "@/components/floating-contact";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -15,11 +17,51 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://portfolio.local"),
   title: {
-    default: "Jyotiranjan Sahoo | Portfolio",
-    template: "%s | Jyotiranjan Sahoo",
+    default: "Jyotiranjan Sahoo | Expert Freelance Web Developer in Brahmapur",
+    template: "%s | Jyotiranjan Sahoo - Full Stack MERN Developer",
   },
-  description: "Premium multi-page portfolio for Jyotiranjan Sahoo, Full Stack Software Developer & Graphic Designer.",
-  keywords: ["Full Stack Developer", "Next.js", "TypeScript", "Portfolio", "UI UX", "AI SaaS"],
+  description: "Elevate your digital presence with Jyotiranjan Sahoo, a premium remote web developer in India. Specializing in modern React.js, Next.js, and complete MERN stack solutions. Hire a freelance web developer who delivers scalable, high-converting digital products.",
+  keywords: [
+    "Freelance React Developer in Brahmapur",
+    "MERN stack developer",
+    "remote web developer India",
+    "freelance web developer for hire",
+    "React.js developer portfolio",
+    "Next.js frontend expert",
+    "custom web app development India",
+    "top freelance software engineer Brahmapur",
+    "B2B website developer"
+  ],
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "Jyotiranjan Sahoo | Expert Freelance Web Developer in Brahmapur",
+    description: "Elevate your digital presence with Jyotiranjan Sahoo, a premium remote web developer in India. Specializing in modern React.js, Next.js, and complete MERN stack solutions.",
+    url: "https://portfolio.local",
+    siteName: "Jyotiranjan Sahoo Portfolio",
+    images: [
+      {
+        url: "/android-chrome-512x512.png",
+        width: 512,
+        height: 512,
+        alt: "Jyotiranjan Sahoo Portfolio",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
@@ -32,7 +74,32 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              "name": "Jyotiranjan Sahoo",
+              "jobTitle": "Freelance React Developer",
+              "url": "https://portfolio.local",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Brahmapur",
+                "addressRegion": "Odisha",
+                "addressCountry": "IN"
+              }
+            })
+          }}
+        />
+      </head>
+      <body className="min-h-full flex flex-col">
+        <Preloader>
+          {children}
+          <FloatingContact />
+        </Preloader>
+      </body>
     </html>
   );
 }

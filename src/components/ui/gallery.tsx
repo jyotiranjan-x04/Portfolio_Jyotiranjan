@@ -99,11 +99,11 @@ export const PhotoGallery = ({
   return (
     <div className="mt-40 relative">
        <div className="absolute inset-0 max-md:hidden top-[200px] -z-10 h-[300px] w-full bg-transparent bg-[linear-gradient(to_right,#57534e_1px,transparent_1px),linear-gradient(to_bottom,#57534e_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-20 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] dark:bg-[linear-gradient(to_right,#a8a29e_1px,transparent_1px),linear-gradient(to_bottom,#a8a29e_1px,transparent_1px)]"></div>
-      <p className="lg:text-md my-2 text-center text-xs font-light uppercase tracking-widest text-slate-600 dark:text-slate-400">
-      A Journey Through Visual Stories
+      <p className="lg:text-md my-2 text-center text-xs font-light uppercase tracking-widest text-zinc-500">
+        Client Testimonials
       </p>
-      <h3 className="z-20 mx-auto max-w-2xl justify-center bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 bg-clip-text py-3 text-center text-4xl text-transparent dark:bg-gradient-to-r dark:from-slate-100 dark:via-slate-200 dark:to-slate-100 dark:bg-clip-text md:text-7xl">
-        Welcome to My <span className="text-rose-500"> Stories</span>
+      <h3 className="z-20 mx-auto max-w-2xl justify-center bg-gradient-to-r from-zinc-100 via-zinc-200 to-zinc-400 bg-clip-text py-3 text-center text-4xl font-bold text-transparent md:text-6xl">
+        Client <span className="text-yellow-400">Stories</span>
       </h3>
       <div className="relative mb-8 h-[350px] w-full items-center justify-center lg:flex">
         <motion.div
@@ -151,11 +151,6 @@ export const PhotoGallery = ({
             </div>
           </motion.div>
         </motion.div>
-      </div>
-      <div className="flex w-full justify-center">
-      <Button>
-        View All Stories
-      </Button>
       </div>
     </div>
   );

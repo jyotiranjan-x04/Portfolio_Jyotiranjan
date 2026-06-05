@@ -35,10 +35,10 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-zinc-800/60 bg-black/80 backdrop-blur-xl">
-      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4">
-        <Link href="/" className="text-xl font-black text-white">
-          <AnimatedLetterText text="Portfolio" className="text-2xl" />
+    <header className="sticky top-0 z-50 pt-2 pointer-events-none">
+      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 pointer-events-auto">
+        <Link href="/" className="text-xl font-bold tracking-wider text-white">
+          jyotiranjan.
         </Link>
         <div className="hidden md:flex">
           <LimelightNav

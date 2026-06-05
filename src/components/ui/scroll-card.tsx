@@ -1,247 +1,271 @@
 'use client';
 import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ArrowUpRight, MapPin } from 'lucide-react';
-import { motion, useScroll, useTransform, useMotionValueEvent, type MotionValue } from 'framer-motion';
-import type { Project } from '@/data/portfolio';
+import { ArrowUpRight, ExternalLink } from 'lucide-react';
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+  AnimatePresence,
+} from 'framer-motion';
 
-interface ScrollCardProjectsProps {
-  projects: Project[];
-  maxCards?: number;
+import { projects } from '@/data/portfolio';
+
+/* ──────────────────────────────────────────────
+   Data for the featured projects
+   ────────────────────────────────────────────── */
+interface FeaturedProject {
+  title: string;
+  subtitle: string;
+  description: string;
+  link: string;
+  color: string;
+  image: string;
+  stack: string[];
+  highlights: string[];
 }
 
 const cardColors = [
-  '#1a1a2e',
-  '#16213e',
-  '#0f3460',
-  '#1b1b2f',
-  '#162447',
-  '#1f4068',
-  '#1a1a2e',
-  '#16213e',
-  '#0f3460',
-  '#1b1b2f',
+  '#1a1a2e', '#0f3460', '#3a0ca3', '#4361ee', '#7209b7', '#f72585', '#1e293b', '#0f172a', '#312e81', '#1e3a8a', '#831843'
 ];
 
-/**
- * A single project card that transforms based on overall scroll progress.
- * Slides up from below, settles into the stack, then scales down as the next card arrives.
- */
-function StackCard({
-  project,
-  index,
-  total,
-  scrollYProgress,
-}: {
-  project: Project;
-  index: number;
-  total: number;
-  scrollYProgress: MotionValue<number>;
-}) {
-  const cardStart = index / total;
-  const cardPeak = Math.min((index + 0.6) / total, 0.99);
-  const cardFade = Math.min((index + 1.1) / total, 1);
+const featuredProjects: FeaturedProject[] = projects.map((p, i) => ({
+  title: p.title,
+  subtitle: p.clientLocation || p.period || 'Project',
+  description: p.summary,
+  link: p.liveDemo || '#',
+  color: cardColors[i % cardColors.length],
+  image: p.image,
+  stack: p.stack,
+  highlights: p.highlights,
+}));
 
-  // Card slides from off-screen to its stacked Y position
-  const y = useTransform(scrollYProgress, [cardStart, cardPeak], [400, index * 12]);
+/* ──────────────────────────────────────────────
+   Component — CSS sticky stacking cards with
+   right-side details that slide per card
+   ────────────────────────────────────────────── */
+export default function ScrollCardProjects() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  // Scale down as the next card arrives on top
-  const scale = useTransform(scrollYProgress, [cardPeak, cardFade], [1, 0.92]);
+  /* Use IntersectionObserver on each card to detect which is in view */
+  const cardRefs = useRef<(HTMLElement | null)[]>([]);
 
-  // Quick fade-in
-  const cardOpacity = useTransform(
-    scrollYProgress,
-    [cardStart, Math.min(cardStart + 0.02, cardPeak)],
-    [0, 1]
-  );
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+
+    cardRefs.current.forEach((el, i) => {
+      if (!el) return;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveIndex(i);
+          }
+        },
+        { threshold: 0.6 }
+      );
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
 
   return (
-    <motion.div
-      style={{ y, scale, opacity: cardOpacity, zIndex: index + 1 }}
-      className="absolute inset-x-0 top-0 will-change-transform"
-    >
-      <Link href={`/projects/${project.slug}`} className="block">
-        <article
-          style={{ backgroundColor: cardColors[index % cardColors.length] }}
-          className="group grid grid-cols-1 md:grid-cols-[1fr_1.2fr] rounded-2xl border border-zinc-700/60 shadow-2xl transition-colors duration-300 hover:border-yellow-400/40"
-        >
-          {/* Image */}
-          <div className="relative h-56 md:h-80 overflow-hidden rounded-t-2xl md:rounded-l-2xl md:rounded-tr-none">
-            <Image
-              src={project.image}
-              alt={project.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-black/20 hidden md:block" />
-          </div>
+    <section ref={sectionRef} className="text-white w-full bg-black py-12 lg:py-0">
+      <div className="flex flex-col lg:flex-row justify-between max-w-7xl mx-auto px-6 gap-8 lg:gap-16">
+        {/* ─── Left column: Stacking cards ─── */}
+        <div className="w-full lg:w-1/2 flex flex-col gap-16 lg:gap-0">
+          {featuredProjects.map((project, i) => (
+            <figure
+              key={i}
+              ref={(el) => { cardRefs.current[i] = el; }}
+              className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center"
+              style={{ zIndex: i + 1 }}
+            >
+              <article
+                className="relative w-full max-w-2xl mx-auto rounded-2xl border border-zinc-700/50 shadow-2xl overflow-hidden lg:transition-transform lg:duration-300 lg:hover:scale-[1.02]"
+                style={{ backgroundColor: project.color }}
+              >
+                {/* Project screenshot */}
+                <div className="relative h-56 sm:h-72 w-full">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-          {/* Content */}
-          <div className="flex flex-col justify-between p-6 md:p-8">
-            <div>
-              <div className="mb-3 flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-yellow-400/15 border border-yellow-400/30 px-3 py-0.5 text-xs font-semibold text-yellow-400">
-                  {project.period}
-                </span>
-                {project.clientLocation && (
-                  <span className="inline-flex items-center gap-1 rounded-full border border-zinc-600 bg-zinc-800/80 px-2.5 py-0.5 text-xs text-zinc-300">
-                    <MapPin className="h-3 w-3" />
-                    {project.clientLocation}
-                  </span>
-                )}
-              </div>
+                  {/* Badge overlay on image */}
+                  <div className="absolute top-4 left-4">
+                    <span className="inline-block rounded-full border border-yellow-400/40 bg-black/60 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-yellow-400">
+                      {project.subtitle}
+                    </span>
+                  </div>
+                </div>
 
-              <h2 className="mb-2 text-xl md:text-2xl font-bold tracking-tight text-white">
-                {project.title}
-              </h2>
-              <p className="mb-4 text-sm leading-relaxed text-zinc-300 line-clamp-3">
-                {project.summary}
-              </p>
+                {/* Card content below image */}
+                <div className="p-6 md:p-8 flex flex-col h-full">
+                  <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
+                    {project.title}
+                  </h2>
+                  <p className="mt-3 text-sm sm:text-base leading-relaxed text-zinc-300">
+                    {project.description}
+                  </p>
 
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {project.stack.slice(0, 6).map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full border border-zinc-600 bg-zinc-800/60 px-2.5 py-0.5 text-[11px] font-medium text-zinc-300"
+                  {/* Mobile Details: Only visible on mobile */}
+                  <div className="mt-6 lg:hidden flex flex-col gap-6">
+                    {/* Highlights */}
+                    <div className="space-y-3">
+                      {project.highlights.map((highlight, hIdx) => (
+                        <div key={hIdx} className="flex items-start gap-3">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-400" />
+                          <p className="text-sm leading-relaxed text-zinc-300">
+                            {highlight}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Tech stack */}
+                    <div>
+                      <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-zinc-500">
+                        Tech Stack
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {project.stack.map((tech) => (
+                          <span
+                            key={tech}
+                            className="rounded-full border border-zinc-600 bg-zinc-800/60 px-3 py-1 text-xs font-medium text-zinc-300 whitespace-nowrap"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group mt-8 lg:mt-6 inline-flex w-fit items-center gap-2 rounded-xl bg-yellow-400 px-5 py-2.5 text-sm font-semibold text-black transition-all hover:bg-yellow-300 hover:shadow-lg hover:shadow-yellow-400/20"
                   >
-                    {tech}
-                  </span>
-                ))}
-                {project.stack.length > 6 && (
-                  <span className="text-[11px] text-zinc-500 self-center">
-                    +{project.stack.length - 6}
-                  </span>
-                )}
-              </div>
-            </div>
+                    Visit Live
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                  </a>
+                </div>
+                {/* SEO structured data for each project */}
+                <script
+                  type="application/ld+json"
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                      "@context": "https://schema.org",
+                      "@type": "CreativeWork",
+                      "name": project.title,
+                      "description": project.description,
+                      "url": project.link,
+                      "author": {
+                        "@type": "Person",
+                        "name": "Jyotiranjan Sahoo"
+                      }
+                    })
+                  }}
+                />
+              </article>
+            </figure>
+          ))}
+        </div>
 
-            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-yellow-400 transition-transform duration-200 group-hover:translate-x-1">
-              View Project <ArrowUpRight className="h-4 w-4" />
-            </span>
-          </div>
-        </article>
-      </Link>
-    </motion.div>
-  );
-}
+        {/* ─── Right column: Sticky details panel that slides per card ─── */}
+        <div className="sticky top-0 h-screen hidden lg:flex flex-col justify-center w-1/2">
+          <div className="relative w-full max-w-xl pr-8 xl:pr-12" style={{ height: '500px' }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                className="absolute inset-0 flex flex-col justify-center"
+                initial={{ y: 40, opacity: 0, filter: 'blur(6px)' }}
+                animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                exit={{ y: -40, opacity: 0, filter: 'blur(6px)' }}
+                transition={{ duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <div className="mb-8">
+                  <h3 className="text-xl font-medium text-yellow-400">
+                    Project Details
+                  </h3>
+                  <p className="mt-2 text-3xl font-bold text-white tracking-tight">
+                    {featuredProjects[activeIndex].title}
+                  </p>
+                  <div className="mt-4 h-px w-16 bg-gradient-to-r from-yellow-400/80 to-transparent" />
+                </div>
 
-/**
- * Scroll-pinned project showcase.
- *
- * Architecture:
- * - The container has a tall computed height (scroll runway) to create scrollable space
- * - A "viewport" element is position:fixed while in-view, showing the current card stack
- * - framer-motion's useScroll tracks scroll progress within the runway
- * - Each card uses useTransform to derive its y, scale, and opacity from scroll progress
- * - This approach is immune to ancestor overflow:hidden since fixed positioning is viewport-relative
- */
-export default function ScrollCardProjects({
-  projects,
-  maxCards = 10,
-}: ScrollCardProjectsProps) {
-  const displayProjects = projects.slice(0, maxCards);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [phase, setPhase] = useState<'before' | 'active' | 'after'>('before');
+                {/* Highlights */}
+                <div className="space-y-4">
+                  {featuredProjects[activeIndex].highlights.map((highlight, hIdx) => (
+                    <div key={hIdx} className="flex items-start gap-4">
+                      <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-400" />
+                      <p className="text-base leading-relaxed text-zinc-300">
+                        {highlight}
+                      </p>
+                    </div>
+                  ))}
+                </div>
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start start', 'end end'],
-  });
+                {/* Tech stack */}
+                <div className="mt-10">
+                  <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-zinc-500">
+                    Tech Stack
+                  </p>
+                  <div className="flex flex-wrap gap-2.5">
+                    {featuredProjects[activeIndex].stack.map((tech) => (
+                      <span
+                        key={tech}
+                        className="rounded-full border border-zinc-600 bg-zinc-800/60 px-4 py-1.5 text-xs font-medium text-zinc-300 whitespace-nowrap"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
 
-  // Track scroll phase: before (not yet entered), active (scrolling through), after (scrolled past)
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (latest <= 0) setPhase('before');
-    else if (latest >= 1) setPhase('after');
-    else setPhase('active');
-  });
+                {/* Link */}
+                <a
+                  href={featuredProjects[activeIndex].link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group mt-12 inline-flex w-fit items-center gap-2 text-sm font-semibold text-yellow-400 transition-colors hover:text-yellow-300"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  {featuredProjects[activeIndex].link.replace('https://', '').replace(/\/$/, '')}
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </a>
+              </motion.div>
+            </AnimatePresence>
 
-  // Active card index for the counter
-  const activeIndex = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, displayProjects.length - 1]
-  );
-  const [currentIndex, setCurrentIndex] = useState(0);
-  useMotionValueEvent(activeIndex, 'change', (latest) => {
-    setCurrentIndex(Math.round(latest));
-  });
-
-  // Each card gets 60vh of scroll runway
-  const scrollRunway = `${displayProjects.length * 60}vh`;
-
-  // Card display area height: enough for one card + some headroom
-  const cardAreaHeight = 'calc(100vh - 160px)';
-
-  return (
-    <div
-      ref={containerRef}
-      className="relative"
-      style={{ height: scrollRunway }}
-    >
-      {/* Viewport element: fixed when active, absolute when before/after */}
-      <div
-        className="w-full"
-        style={{
-          position: phase === 'active' ? 'fixed' : 'absolute',
-          top: phase === 'active' ? '80px' : phase === 'before' ? '0' : undefined,
-          bottom: phase === 'after' ? '0' : undefined,
-          left: 0,
-          right: 0,
-          zIndex: 10,
-        }}
-      >
-        <div className="mx-auto flex w-full max-w-7xl items-start gap-8 px-6">
-          {/* Cards area */}
-          <div className="relative flex-1" style={{ height: cardAreaHeight, maxHeight: '500px' }}>
-            {displayProjects.map((project, i) => (
-              <StackCard
-                key={project.slug}
-                project={project}
-                index={i}
-                total={displayProjects.length}
-                scrollYProgress={scrollYProgress}
-              />
-            ))}
-          </div>
-
-          {/* Counter panel */}
-          <div className="hidden lg:flex flex-col w-52 shrink-0 pt-6">
-            <div className="space-y-5 text-right">
-              <p className="text-7xl font-black text-white leading-none">
-                {projects.length}
-                <span className="text-yellow-400">+</span>
-              </p>
-              <div>
-                <p className="text-xl font-bold tracking-wide text-zinc-300">Projects</p>
-                <p className="text-xl font-bold tracking-wide text-zinc-300">Delivered</p>
-              </div>
-              <div className="ml-auto h-px w-16 bg-gradient-to-r from-transparent to-yellow-400/60" />
-
-              {/* Progress dots */}
-              <div className="flex justify-end gap-1.5">
-                {displayProjects.map((_, i) => (
+            {/* Progress indicator */}
+            <div className="absolute bottom-0 right-0 flex flex-col items-end gap-2">
+              <div className="flex gap-1.5">
+                {featuredProjects.map((_, i) => (
                   <div
                     key={i}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      i === currentIndex
-                        ? 'w-6 bg-yellow-400'
-                        : i < currentIndex
-                        ? 'w-1.5 bg-yellow-400/40'
+                    className={`h-1.5 rounded-full transition-all duration-500 ${
+                      i === activeIndex
+                        ? 'w-8 bg-yellow-400'
                         : 'w-1.5 bg-zinc-600'
                     }`}
                   />
                 ))}
               </div>
-
-              <p className="text-sm text-zinc-500">
-                {currentIndex + 1} / {displayProjects.length}
+              <p className="text-xs text-zinc-500">
+                {activeIndex + 1} / {featuredProjects.length}
               </p>
-              <p className="text-xs text-zinc-600">Scroll to explore ↓</p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }

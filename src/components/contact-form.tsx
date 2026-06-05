@@ -1,15 +1,51 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 export function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+    
+    if (status === "loading") return;
+    
+    setStatus("loading");
+    setErrorMessage("");
+
+    const formData = new FormData(event.currentTarget);
+    const data = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setStatus("success");
+        (event.target as HTMLFormElement).reset();
+      } else {
+        setStatus("error");
+        setErrorMessage(result.error || "Failed to send message. Please try again later.");
+      }
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage("An unexpected error occurred. Please try again later.");
+    }
   };
 
   return (
@@ -20,7 +56,8 @@ export function ContactForm() {
           required
           name="name"
           placeholder="Your name"
-          className="rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring"
+          disabled={status === "loading"}
+          className="rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
         />
         <input
           suppressHydrationWarning
@@ -28,7 +65,8 @@ export function ContactForm() {
           type="email"
           name="email"
           placeholder="Email"
-          className="rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring"
+          disabled={status === "loading"}
+          className="rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
         />
       </div>
       <input
@@ -36,7 +74,8 @@ export function ContactForm() {
         required
         name="subject"
         placeholder="Subject"
-        className="w-full rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring"
+        disabled={status === "loading"}
+        className="w-full rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
       />
       <textarea
         suppressHydrationWarning
@@ -44,12 +83,33 @@ export function ContactForm() {
         name="message"
         rows={6}
         placeholder="Tell me about your project..."
-        className="w-full rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring"
+        disabled={status === "loading"}
+        className="w-full rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
       />
-      <Button type="submit" className="bg-yellow-400 text-black hover:bg-yellow-300">
-        Send Message
+      <Button 
+        type="submit" 
+        disabled={status === "loading" || status === "success"}
+        className="bg-yellow-400 text-black hover:bg-yellow-300 disabled:bg-yellow-600"
+      >
+        {status === "loading" ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Sending...
+          </>
+        ) : status === "success" ? (
+          "Message Sent"
+        ) : (
+          "Send Message"
+        )}
       </Button>
-      {submitted ? <p className="text-sm text-yellow-300">Thanks! I will get back to you shortly.</p> : null}
+      
+      {status === "success" && (
+        <p className="text-sm font-medium text-green-400">Message sent successfully!</p>
+      )}
+      
+      {status === "error" && (
+        <p className="text-sm font-medium text-red-400">{errorMessage}</p>
+      )}
     </form>
   );
 }

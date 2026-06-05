@@ -21,13 +21,11 @@ const ICONS_ROW1: TechIcon[] = [
 
 const ICONS_ROW2: TechIcon[] = [
   { name: "Python", src: "/assets/icons/hero/python.svg" },
-  { name: "Java", src: "/assets/icons/hero/java.svg" },
   { name: "PostgreSQL", src: "/assets/icons/hero/postgresql.svg" },
   { name: "MySQL", src: "/assets/icons/hero/mysql.svg" },
   { name: "MongoDB", src: "/assets/icons/hero/mongodb.svg" },
   { name: "Firebase", src: "/assets/icons/hero/firebase.svg" },
   { name: "Prisma", src: "/assets/icons/hero/prisma.svg" },
-  { name: "AWS", src: "/assets/icons/hero/amazonaws.svg" },
   { name: "Vercel", src: "/assets/icons/hero/vercel.svg" },
   { name: "Figma", src: "/assets/icons/hero/figma.svg" },
   { name: "GitHub", src: "/assets/icons/hero/github.svg" },

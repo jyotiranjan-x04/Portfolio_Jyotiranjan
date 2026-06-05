@@ -14,6 +14,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { FlipLinksRow } from '@/components/ui/flip-links';
 import { LimelightNav, NavItem } from '@/components/ui/limelight-nav';
 import { cn } from '@/lib/utils';
+import { usePreloader } from '@/components/preloader';
 
 // Define the props interface for type safety and reusability
 interface MinimalistHeroProps {
@@ -47,6 +48,7 @@ export const MinimalistHero = ({
 }: MinimalistHeroProps) => {
   const pathname = usePathname();
   const router = useRouter();
+  const { isFinished } = usePreloader();
 
   const iconByLabel: Record<string, React.ReactElement<{ className?: string }>> = {
     HOME: <House />,
@@ -82,38 +84,28 @@ export const MinimalistHero = ({
         className
       )}
     >
-      {/* Header */}
-      <header className="z-30 flex w-full max-w-7xl items-center justify-between">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-xl font-bold tracking-wider"
-        >
-          {logoText}
-        </motion.div>
-        <div className="hidden md:flex">
-          <LimelightNav
-            items={navItems}
-            defaultActiveIndex={activeIndex}
-            className="h-14 bg-zinc-900/50"
-            iconClassName="text-zinc-100"
-            iconContainerClassName="px-4"
-            limelightClassName="bg-yellow-400"
-          />
-        </div>
-      </header>
 
       {/* Main Content Area */}
       <div className="relative grid w-full max-w-7xl flex-grow grid-cols-1 items-center md:grid-cols-3">
         {/* Left Text Content */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
           className="z-20 order-2 md:order-1 text-center md:text-left"
         >
-          <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">{mainText}</p>
+          <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">
+            {mainText.split("").map((char, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={isFinished ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.05, delay: 0.5 + index * 0.02 }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </p>
           <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
             Read More
           </a>
@@ -129,8 +121,8 @@ export const MinimalistHero = ({
                 alt={imageAlt}
             className="relative z-10 h-[64dvh] w-auto max-w-none object-contain object-center sm:h-[70dvh] md:h-[78dvh] lg:h-[88dvh]"
                 initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                animate={isFinished ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
                 onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.onerror = null;
@@ -141,9 +133,9 @@ export const MinimalistHero = ({
 
         {/* Right Text */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
+          initial={{ opacity: 0, x: 50 }}
+          animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
           className="z-20 order-3 flex items-center justify-center text-center md:justify-start"
         >
           <h1 className="text-7xl font-extrabold text-foreground md:text-8xl lg:text-9xl">
@@ -158,8 +150,8 @@ export const MinimalistHero = ({
       <footer className="z-40 flex w-full max-w-7xl flex-col items-start gap-4 md:flex-row md:items-end md:justify-between">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.3 }}
+          animate={isFinished ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
           className="text-sm font-medium text-foreground/80 md:text-right"
         >
           {locationText}

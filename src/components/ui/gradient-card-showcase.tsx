@@ -20,12 +20,12 @@ export default function GradientCardShowcase({
 }: GradientCardShowcaseProps) {
   return (
     <>
-      <div className="flex flex-wrap items-center justify-center py-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 place-items-center py-10 max-w-5xl mx-auto">
         {cards.map(
           ({ title, description, icon: Icon, gradientFrom, gradientTo }, idx) => (
             <div
               key={idx}
-              className="group relative m-[30px_20px] h-[400px] w-[320px] transition-all duration-500"
+              className="group relative h-[400px] w-full max-w-[380px] transition-all duration-500"
             >
               {/* Skewed gradient panels */}
               <span

@@ -47,46 +47,59 @@ export default async function ProjectDetailPage({
   return (
     <>
       <SiteHeader />
-      <main className="mx-auto w-full max-w-7xl space-y-12 px-6 py-16">
-        <section className="space-y-5">
-          <div className="flex flex-wrap items-center gap-3">
-            <p className="text-sm text-yellow-400">{project.period}</p>
-            {project.clientLocation && (
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-900/80 px-3 py-1 text-xs font-medium text-zinc-200">
-                {project.clientLocation}
-              </span>
-            )}
+      <main className="mx-auto w-full max-w-7xl px-6 py-16">
+        <div className="grid gap-12 lg:grid-cols-12">
+          {/* Left Column: Details & Highlights */}
+          <div className="space-y-8 lg:col-span-5">
+            <section className="space-y-5">
+              <div className="flex flex-wrap items-center gap-3">
+                <p className="text-sm text-yellow-400">{project.period}</p>
+                {project.clientLocation && (
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-zinc-700 bg-zinc-900/80 px-3 py-1 text-xs font-medium text-zinc-200">
+                    {project.clientLocation}
+                  </span>
+                )}
+              </div>
+              <SectionTitle title={project.title} subtitle={project.about || project.summary} className="mb-0" />
+              <ProjectTechStack stack={project.stack} className="mt-2" />
+              {project.liveDemo && project.liveDemo !== "#" && (
+                <a
+                  href={project.liveDemo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center gap-2 rounded-full border border-yellow-400/40 bg-yellow-400/10 px-5 py-2.5 text-sm font-medium text-yellow-400 transition-all hover:bg-yellow-400/20 hover:shadow-lg hover:shadow-yellow-400/10"
+                >
+                  Visit Live Site →
+                </a>
+              )}
+            </section>
+
+            <section className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-6">
+              <h2 className="mb-4 text-xl font-semibold text-yellow-400">Highlights</h2>
+              <ul className="space-y-2 text-zinc-300">
+                {project.highlights.map((point) => (
+                  <li key={point}>• {point}</li>
+                ))}
+              </ul>
+            </section>
           </div>
-          <SectionTitle title={project.title} subtitle={project.about || project.summary} className="mb-0" />
-          <ProjectTechStack stack={project.stack} className="mt-2" />
-          {project.liveDemo && project.liveDemo !== "#" && (
-            <a
-              href={project.liveDemo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 inline-flex items-center gap-2 rounded-full border border-yellow-400/40 bg-yellow-400/10 px-5 py-2.5 text-sm font-medium text-yellow-400 transition-all hover:bg-yellow-400/20 hover:shadow-lg hover:shadow-yellow-400/10"
-            >
-              Visit Live Site →
-            </a>
-          )}
-        </section>
 
-        <section className="grid gap-8 md:grid-cols-3">
-          {project.galleryImages.map((image) => (
-            <div key={image} className="overflow-hidden rounded-2xl border border-zinc-800">
-              <Image src={image} alt={project.title} width={900} height={700} className="h-full w-full object-cover" />
-            </div>
-          ))}
-        </section>
-
-        <section className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-6">
-          <h2 className="mb-4 text-xl font-semibold text-yellow-400">Highlights</h2>
-          <ul className="space-y-2 text-zinc-300">
-            {project.highlights.map((point) => (
-              <li key={point}>• {point}</li>
+          {/* Right Column: Images */}
+          <div className="space-y-8 lg:col-span-7">
+            {project.galleryImages.map((image) => (
+              <div key={image} className="overflow-hidden rounded-2xl border border-zinc-800 shadow-xl">
+                <Image 
+                  src={image} 
+                  alt={project.title} 
+                  width={1200} 
+                  height={800} 
+                  className="w-full h-auto object-cover" 
+                  priority
+                />
+              </div>
             ))}
-          </ul>
-        </section>
+          </div>
+        </div>
       </main>
       <SiteFooter />
     </>
