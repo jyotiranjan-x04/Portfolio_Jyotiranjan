@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { AnimatedLetterText } from "@/components/ui/potfolio-text";
 import { LimelightNav, NavItem } from "@/components/ui/limelight-nav";
+import Dock from "@/components/ui/dock";
 
 const navItems = [
   { id: "home", href: "/", label: "Home", icon: <House /> },
@@ -27,6 +28,12 @@ export function SiteHeader() {
     onClick: () => router.push(item.href),
   }));
 
+  const dockItems = navItems.map((item) => ({
+    icon: item.icon,
+    label: item.label,
+    onClick: () => router.push(item.href),
+  }));
+
   const activeIndex = Math.max(
     navItems.findIndex((item) =>
       item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)
@@ -35,22 +42,29 @@ export function SiteHeader() {
   );
 
   return (
-    <header className="sticky top-0 z-50 pt-2 pointer-events-none">
-      <nav className="mx-auto flex w-full max-w-7xl flex-col md:flex-row items-center justify-between gap-4 px-4 md:px-6 py-4 pointer-events-auto">
-        <Link href="/" className="text-xl font-bold tracking-wider text-white">
-          jyotiranjan.
-        </Link>
-        <div className="flex w-full md:w-auto justify-center md:justify-end overflow-x-auto no-scrollbar pb-2 md:pb-0">
-          <LimelightNav
-            items={mappedItems}
-            defaultActiveIndex={activeIndex}
-            className="bg-zinc-900/70"
-            iconClassName="text-zinc-200"
-            iconContainerClassName="px-2 sm:px-4"
-            limelightClassName="bg-yellow-400"
-          />
-        </div>
-      </nav>
-    </header>
+    <>
+      <header className="sticky top-0 z-50 pt-2 pointer-events-none">
+        <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 pointer-events-auto">
+          <Link href="/" className="text-xl font-bold tracking-wider text-white">
+            jyotiranjan.
+          </Link>
+          <div className="hidden md:flex">
+            <LimelightNav
+              items={mappedItems}
+              defaultActiveIndex={activeIndex}
+              className="bg-zinc-900/70"
+              iconClassName="text-zinc-200"
+              iconContainerClassName="px-4"
+              limelightClassName="bg-yellow-400"
+            />
+          </div>
+        </nav>
+      </header>
+
+      {/* Mobile Dock Navigation */}
+      <div className="md:hidden fixed bottom-6 left-0 right-0 z-50 pointer-events-auto flex justify-center">
+        <Dock items={dockItems} className="py-0 px-2" />
+      </div>
+    </>
   );
 }

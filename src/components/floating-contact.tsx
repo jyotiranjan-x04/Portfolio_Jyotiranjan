@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import { MessageCircle, Phone, GitBranch } from "lucide-react";
 import { portfolioData } from "@/data/portfolio";
 import { InstagramBrandIcon } from "@/components/ui/icons/instagram-brand-icon";
@@ -16,21 +17,47 @@ const SupportIcon = ({ className }: { className?: string }) => (
 )
 
 export function FloatingContact() {
+  const [isOpen, setIsOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIsOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setIsOpen(false);
+    }, 300);
+  };
+
+  const toggleOpen = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <div className="fixed bottom-6 right-6 z-50 group">
-      {/* Container that acts as the hover trigger */}
+    <div 
+      className="fixed bottom-6 right-6 z-50"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className="relative w-14 h-14">
-        <div className="absolute inset-0 bg-yellow-400 text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(250,204,21,0.5)] transition-transform duration-300 group-hover:scale-110 z-10 cursor-pointer">
+        <div 
+          onClick={toggleOpen}
+          className="absolute inset-0 bg-yellow-400 text-black rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(250,204,21,0.5)] transition-transform duration-300 hover:scale-110 z-10 cursor-pointer"
+        >
           <SupportIcon className="w-7 h-7" />
         </div>
 
-        {/* Floating Actions Container - Quarter Circle layout */}
         {/* GitHub (Top - 90 deg) */}
         <a
           href={portfolioData.socials.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute w-12 h-12 bg-zinc-900 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 group-hover:-translate-y-[120px] z-0 border border-zinc-700 hover:border-white hover:text-white"
+          className={cn(
+            "absolute w-12 h-12 bg-zinc-900 text-white rounded-full flex items-center justify-center shadow-lg transition-all duration-300 z-0 border border-zinc-700 hover:border-white hover:text-white",
+            isOpen ? "opacity-100 scale-100 -translate-y-[120px]" : "opacity-0 scale-0 pointer-events-none"
+          )}
         >
           <GitBranch className="w-5 h-5" />
         </a>
@@ -40,7 +67,10 @@ export function FloatingContact() {
           href={portfolioData.socials.instagram}
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute w-12 h-12 bg-zinc-900 text-pink-500 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 delay-[50ms] opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 group-hover:-translate-y-[104px] group-hover:-translate-x-[60px] z-0 border border-zinc-700 hover:border-pink-500 hover:text-pink-400"
+          className={cn(
+            "absolute w-12 h-12 bg-zinc-900 text-pink-500 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 delay-[50ms] z-0 border border-zinc-700 hover:border-pink-500 hover:text-pink-400",
+            isOpen ? "opacity-100 scale-100 -translate-y-[104px] -translate-x-[60px]" : "opacity-0 scale-0 pointer-events-none"
+          )}
         >
           <InstagramBrandIcon className="w-5 h-5" />
         </a>
@@ -48,7 +78,10 @@ export function FloatingContact() {
         {/* Phone (30 deg) */}
         <a
           href="tel:+918114325023"
-          className="absolute w-12 h-12 bg-zinc-900 text-blue-500 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 delay-[100ms] opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 group-hover:-translate-y-[60px] group-hover:-translate-x-[104px] z-0 border border-zinc-700 hover:border-blue-500 hover:text-blue-400"
+          className={cn(
+            "absolute w-12 h-12 bg-zinc-900 text-blue-500 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 delay-[100ms] z-0 border border-zinc-700 hover:border-blue-500 hover:text-blue-400",
+            isOpen ? "opacity-100 scale-100 -translate-y-[60px] -translate-x-[104px]" : "opacity-0 scale-0 pointer-events-none"
+          )}
         >
           <Phone className="w-5 h-5" />
         </a>
@@ -58,7 +91,10 @@ export function FloatingContact() {
           href="https://wa.me/918114325023"
           target="_blank"
           rel="noopener noreferrer"
-          className="absolute w-12 h-12 bg-zinc-900 text-green-500 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 delay-[150ms] opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 group-hover:-translate-x-[120px] z-0 border border-zinc-700 hover:border-green-500 hover:text-green-400"
+          className={cn(
+            "absolute w-12 h-12 bg-zinc-900 text-green-500 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 delay-[150ms] z-0 border border-zinc-700 hover:border-green-500 hover:text-green-400",
+            isOpen ? "opacity-100 scale-100 -translate-x-[120px]" : "opacity-0 scale-0 pointer-events-none"
+          )}
         >
           <MessageCircle className="w-5 h-5" />
         </a>
