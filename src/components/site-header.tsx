@@ -40,7 +40,7 @@ export function SiteHeader() {
         <Link href="/" className="text-xl font-bold tracking-wider text-white">
           jyotiranjan.
         </Link>
-        <div className="flex w-full md:w-auto justify-end overflow-x-auto no-scrollbar pb-2 md:pb-0">
+        <div className="flex w-full md:w-auto justify-center md:justify-end overflow-x-auto no-scrollbar pb-2 md:pb-0">
           <LimelightNav
             items={mappedItems}
             defaultActiveIndex={activeIndex}
