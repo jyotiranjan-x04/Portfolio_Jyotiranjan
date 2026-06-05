@@ -85,37 +85,39 @@ export const MinimalistHero = ({
       )}
     >
 
-      {/* Main Content Area */}
-      <div className="relative grid w-full max-w-7xl flex-grow grid-cols-1 items-center gap-y-12 md:grid-cols-3 md:gap-y-0 pt-16 md:pt-0">
-        {/* Left Text Content */}
+      <div className="relative flex w-full max-w-7xl flex-grow items-center justify-center pt-16 md:pt-0">
+        {/* Social Links (Right on mobile, Left on desktop) */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="z-20 order-2 md:order-1 text-center md:text-left"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col justify-center text-right md:static md:translate-y-0 md:top-auto md:w-1/3 md:text-left"
         >
-          <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">
-            {mainText.split("").map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0 }}
-                animate={isFinished ? { opacity: 1 } : { opacity: 0 }}
-                transition={{ duration: 0.05, delay: 0.5 + index * 0.02 }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </p>
-          <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
-            Read More
-          </a>
-          <div className="mt-5 flex justify-center md:justify-start">
+          <div className="hidden md:block">
+            <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">
+              {mainText.split("").map((char, index) => (
+                <motion.span
+                  key={index}
+                  initial={{ opacity: 0 }}
+                  animate={isFinished ? { opacity: 1 } : { opacity: 0 }}
+                  transition={{ duration: 0.05, delay: 0.5 + index * 0.02 }}
+                >
+                  {char}
+                </motion.span>
+              ))}
+            </p>
+            <a href={readMoreLink} className="mt-4 inline-block text-sm font-medium text-foreground underline decoration-from-font">
+              Read More
+            </a>
+          </div>
+          {/* On mobile: justify-end, scale from right. On desktop: justify-start, scale from left */}
+          <div className="mt-5 flex justify-end scale-75 origin-right md:justify-start md:scale-100 md:origin-left">
             <FlipLinksRow links={socialLinks} />
           </div>
         </motion.div>
 
-        {/* Center Image with Circle */}
-        <div className="relative order-1 md:order-2 flex h-full items-end justify-center overflow-visible">
+        {/* Center Image */}
+        <div className="relative flex h-full w-full md:w-1/3 items-end justify-center overflow-visible">
             <motion.img
                 src={imageSrc}
                 alt={imageAlt}
@@ -131,14 +133,14 @@ export const MinimalistHero = ({
             />
         </div>
 
-        {/* Right Text */}
+        {/* Build Bold Text (Left on mobile, Right on desktop) */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="z-20 order-3 flex items-center justify-center text-center md:justify-start"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-start text-left md:static md:translate-y-0 md:top-auto md:w-1/3 md:justify-start md:text-left"
         >
-          <h1 className="text-5xl font-extrabold text-foreground sm:text-7xl md:text-8xl lg:text-9xl">
+          <h1 className="text-4xl font-extrabold text-foreground sm:text-5xl md:text-8xl lg:text-9xl">
             {overlayText.part1}
             <br />
             {overlayText.part2}
