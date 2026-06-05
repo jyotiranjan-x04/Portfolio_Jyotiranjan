@@ -20,6 +20,7 @@ export function ContactForm() {
     const data = {
       name: formData.get("name"),
       email: formData.get("email"),
+      phone: formData.get("phone"),
       subject: formData.get("subject"),
       message: formData.get("message"),
     };
@@ -68,15 +69,24 @@ export function ContactForm() {
           disabled={status === "loading"}
           className="rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
         />
+        <input
+          suppressHydrationWarning
+          required
+          type="tel"
+          name="phone"
+          placeholder="Phone Number"
+          disabled={status === "loading"}
+          className="rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
+        />
+        <input
+          suppressHydrationWarning
+          required
+          name="subject"
+          placeholder="Subject"
+          disabled={status === "loading"}
+          className="rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
+        />
       </div>
-      <input
-        suppressHydrationWarning
-        required
-        name="subject"
-        placeholder="Subject"
-        disabled={status === "loading"}
-        className="w-full rounded-lg border border-zinc-700 bg-black px-4 py-3 text-sm text-white outline-none ring-yellow-400/40 transition focus:ring disabled:opacity-50"
-      />
       <textarea
         suppressHydrationWarning
         required
