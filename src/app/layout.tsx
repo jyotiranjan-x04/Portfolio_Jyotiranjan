@@ -14,8 +14,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const baseUrl = process.env.VERCEL_URL 
+  ? `https://${process.env.VERCEL_URL}` 
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://portfolio.local"),
+  metadataBase: new URL(baseUrl),
   title: {
     default: "Jyotiranjan Sahoo | Expert Freelance Web Developer in Brahmapur",
     template: "%s | Jyotiranjan Sahoo - Full Stack MERN Developer",
@@ -38,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Jyotiranjan Sahoo | Expert Freelance Web Developer in Brahmapur",
     description: "Elevate your digital presence with Jyotiranjan Sahoo, a premium remote web developer in India. Specializing in modern React.js, Next.js, and complete MERN stack solutions.",
-    url: "https://portfolio.local",
+    url: baseUrl,
     siteName: "Jyotiranjan Sahoo Portfolio",
     images: [
       {
