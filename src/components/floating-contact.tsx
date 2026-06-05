@@ -37,7 +37,7 @@ export function FloatingContact() {
 
   return (
     <div 
-      className="fixed bottom-6 right-6 z-50"
+      className="fixed max-md:bottom-[160px] md:bottom-6 right-4 md:right-6 z-50"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
