@@ -11,6 +11,7 @@ import {
 } from 'framer-motion';
 
 import { projects } from '@/data/portfolio';
+import { AosWrapper } from '@/components/ui/aos-wrapper';
 
 /* ──────────────────────────────────────────────
    Data for the featured projects
@@ -84,10 +85,11 @@ export default function ScrollCardProjects() {
               className="lg:sticky lg:top-0 lg:h-screen flex flex-col justify-center"
               style={{ zIndex: i + 1 }}
             >
-              <article
-                className="relative w-full max-w-2xl mx-auto rounded-2xl border border-zinc-700/50 shadow-2xl overflow-hidden lg:transition-transform lg:duration-300 lg:hover:scale-[1.02]"
-                style={{ backgroundColor: project.color }}
-              >
+              <AosWrapper delay={0.1}>
+                <article
+                  className="relative w-full max-w-2xl mx-auto rounded-2xl border border-zinc-700/50 shadow-2xl overflow-hidden lg:transition-transform lg:duration-300 lg:hover:scale-[1.02]"
+                  style={{ backgroundColor: project.color }}
+                >
                 {/* Project screenshot */}
                 <div className="relative h-56 sm:h-72 w-full">
                   <Image
@@ -176,6 +178,7 @@ export default function ScrollCardProjects() {
                   }}
                 />
               </article>
+              </AosWrapper>
             </figure>
           ))}
         </div>
