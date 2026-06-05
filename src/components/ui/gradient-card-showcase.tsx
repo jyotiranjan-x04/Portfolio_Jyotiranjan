@@ -1,5 +1,6 @@
 import React from 'react';
 import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface ServiceCardData {
   title: string;
@@ -54,12 +55,12 @@ export default function GradientCardShowcase({
                 <p className="mb-4 text-base leading-relaxed text-zinc-300">
                   {description}
                 </p>
-                <a
+                <Link
                   href={contactHref}
                   className="inline-block rounded-lg bg-yellow-400 px-4 py-2 text-sm font-bold text-black transition-colors hover:bg-yellow-300"
                 >
                   Let&apos;s Discuss →
-                </a>
+                </Link>
               </div>
             </div>
           )
