@@ -119,13 +119,9 @@ export const projects: Project[] = [
       "Built hybrid cloud storage pipeline using AWS S3 and Google Drive.",
       "Integrated subscription and transaction workflows using Razorpay.",
     ],
-    liveDemo: "#",
-    image: "/assets/projects/edusaarthi-cover.jpg",
-    galleryImages: [
-      "/assets/projects/edusaarthi-1.jpg",
-      "/assets/projects/edusaarthi-2.jpg",
-      "/assets/projects/edusaarthi-3.jpg",
-    ],
+    liveDemo: "https://edusaarthi-iota.vercel.app/",
+    image: "/assets/projects/edusaarthi-new-cover.png",
+    galleryImages: ["/assets/projects/edusaarthi-new-cover.png"],
   },
   {
     slug: "peckers-chicken",
@@ -156,29 +152,13 @@ export const projects: Project[] = [
       "Event and private catering information with visual gallery.",
       "Atmosphere and ambiance visual gallery with modern design.",
     ],
-    liveDemo: "#",
+    liveDemo: "https://coasis.vercel.app/",
     image: "/assets/projects/coasis-cover.png",
     galleryImages: ["/assets/projects/coasis-cover.png"],
     clientLocation: "🇺🇸 Tampa, Florida, USA",
     about: "Premium restaurant and event venue website for Coasis in Tampa. Showcases their unique atmosphere, menu offerings, entertainment, and event hosting capabilities for an unforgettable experience.",
   },
-  {
-    slug: "edusaarthi-platform",
-    title: "EduSaarthi Platform",
-    period: "2026",
-    stack: ["Next.js", "React", "TypeScript", "PostgreSQL", "Prisma", "Razorpay", "AWS S3"],
-    summary:
-      "An EdTech SaaS platform where students can share notes for in-website credits and purchase notes. Features a complete marketplace ecosystem for educational content.",
-    highlights: [
-      "Note sharing marketplace with credit-based economy for students.",
-      "Secure content delivery with role-based access control.",
-      "Payment integration with Razorpay and hybrid cloud storage pipeline.",
-    ],
-    liveDemo: "https://edusaarthi-iota.vercel.app/",
-    image: "/assets/projects/edusaarthi-new-cover.png",
-    galleryImages: ["/assets/projects/edusaarthi-new-cover.png"],
-    clientLocation: "🇮🇳 India",
-  },
+
   {
     slug: "vigro-it",
     title: "Vigro IT",

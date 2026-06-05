@@ -91,7 +91,7 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, x: -50 }}
           animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="absolute right-4 top-[35%] -translate-y-1/2 z-20 flex flex-col justify-center text-right md:static md:translate-y-0 md:top-auto md:w-1/3 md:text-left"
+          className="absolute right-4 top-[65%] -translate-y-1/2 z-20 flex flex-col justify-center text-right md:static md:translate-y-0 md:top-auto md:w-1/3 md:text-left"
         >
           <div className="hidden md:block">
             <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">
