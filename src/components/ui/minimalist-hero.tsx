@@ -85,13 +85,13 @@ export const MinimalistHero = ({
       )}
     >
 
-      <div className="relative flex w-full max-w-7xl flex-grow items-center justify-center pt-16 md:pt-0">
-        {/* Social Links (Right on mobile, Left on desktop) */}
+      <div className="relative flex flex-col md:flex-row w-full max-w-7xl flex-grow items-center justify-start md:justify-center pt-8 md:pt-0">
+        {/* Social Links (Hidden on mobile, Left on desktop) */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="absolute right-4 top-[65%] -translate-y-1/2 z-20 flex flex-col justify-center text-right md:static md:translate-y-0 md:top-auto md:w-1/3 md:text-left"
+          className="hidden z-20 md:flex flex-col justify-center w-full md:w-1/3 text-left order-1"
         >
           <div className="hidden md:block">
             <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">
@@ -110,14 +110,14 @@ export const MinimalistHero = ({
               Read More
             </a>
           </div>
-          {/* On mobile: justify-end, scale from right. On desktop: justify-start, scale from left */}
-          <div className="mt-5 flex justify-end scale-75 origin-right md:justify-start md:scale-100 md:origin-left">
+          {/* On desktop: justify-start, scale from left */}
+          <div className="mt-5 flex justify-start scale-100 origin-left">
             <FlipLinksRow links={socialLinks} />
           </div>
         </motion.div>
 
         {/* Center Image */}
-        <div className="relative flex h-full w-full md:w-1/3 flex-col items-center justify-start pt-8 md:pt-0 md:justify-end overflow-visible">
+        <div className="relative flex h-full w-full md:w-1/3 flex-col items-center justify-start pt-2 md:pt-0 md:justify-end overflow-visible order-3 md:order-2">
             <motion.img
                 src={imageSrc}
                 alt={imageAlt}
@@ -147,12 +147,12 @@ export const MinimalistHero = ({
             </motion.div>
         </div>
 
-        {/* Build Bold Text (Left on mobile, Right on desktop) */}
+        {/* Build Bold Text (Top on mobile, Right on desktop) */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="absolute left-4 top-[35%] -translate-y-1/2 z-20 flex items-center justify-start text-left md:static md:translate-y-0 md:top-auto md:w-1/3 md:justify-start md:text-left"
+          className="z-20 flex items-center justify-center text-center w-full md:w-1/3 md:justify-start md:text-left order-2 md:order-3 mb-0 mt-4 md:m-0"
         >
           <h1 className="text-4xl font-extrabold text-foreground sm:text-5xl md:text-8xl lg:text-9xl">
             {overlayText.part1}
