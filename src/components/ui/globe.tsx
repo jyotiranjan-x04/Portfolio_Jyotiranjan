@@ -31,6 +31,7 @@ export function Globe({ className }: { className?: string }) {
       markers: [
         { location: [20.2961, 85.8245], size: 0.1 } // Bhubaneswar roughly
       ],
+      // @ts-expect-error onRender is missing from cobe types but is a valid option
       onRender: (state) => {
         state.phi = phi
         phi += 0.003
