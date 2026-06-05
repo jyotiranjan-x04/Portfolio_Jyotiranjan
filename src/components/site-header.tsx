@@ -36,17 +36,17 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 pt-2 pointer-events-none">
-      <nav className="mx-auto flex w-full max-w-7xl items-center justify-between gap-4 px-6 py-4 pointer-events-auto">
+      <nav className="mx-auto flex w-full max-w-7xl flex-col md:flex-row items-center justify-between gap-4 px-4 md:px-6 py-4 pointer-events-auto">
         <Link href="/" className="text-xl font-bold tracking-wider text-white">
           jyotiranjan.
         </Link>
-        <div className="hidden md:flex">
+        <div className="flex w-full md:w-auto justify-end overflow-x-auto no-scrollbar pb-2 md:pb-0">
           <LimelightNav
             items={mappedItems}
             defaultActiveIndex={activeIndex}
             className="bg-zinc-900/70"
             iconClassName="text-zinc-200"
-            iconContainerClassName="px-4"
+            iconContainerClassName="px-2 sm:px-4"
             limelightClassName="bg-yellow-400"
           />
         </div>

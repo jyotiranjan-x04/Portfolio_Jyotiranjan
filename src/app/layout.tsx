@@ -4,6 +4,8 @@ import { Preloader } from "@/components/preloader";
 import { FloatingContact } from "@/components/floating-contact";
 import "./globals.css";
 
+export const dynamic = "force-dynamic";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
