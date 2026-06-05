@@ -91,7 +91,7 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, x: -50 }}
           animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 flex flex-col justify-center text-right md:static md:translate-y-0 md:top-auto md:w-1/3 md:text-left"
+          className="absolute right-4 top-[35%] -translate-y-1/2 z-20 flex flex-col justify-center text-right md:static md:translate-y-0 md:top-auto md:w-1/3 md:text-left"
         >
           <div className="hidden md:block">
             <p className="mx-auto max-w-xs text-sm leading-relaxed text-foreground/80 md:mx-0">
@@ -117,7 +117,7 @@ export const MinimalistHero = ({
         </motion.div>
 
         {/* Center Image */}
-        <div className="relative flex h-full w-full md:w-1/3 items-end justify-center overflow-visible">
+        <div className="relative flex h-full w-full md:w-1/3 flex-col items-center justify-start pt-8 md:pt-0 md:justify-end overflow-visible">
             <motion.img
                 src={imageSrc}
                 alt={imageAlt}
@@ -131,6 +131,20 @@ export const MinimalistHero = ({
                 target.src = "/assets/placeholders/image-not-found.svg";
                 }}
             />
+            {/* Description Text for Mobile ONLY */}
+            <motion.div 
+               className="mt-6 flex flex-col items-center text-center md:hidden z-20 px-4 pb-24"
+               initial={{ opacity: 0 }}
+               animate={isFinished ? { opacity: 1 } : { opacity: 0 }}
+               transition={{ duration: 0.6, delay: 0.8 }}
+            >
+              <p className="max-w-xs text-sm leading-relaxed text-foreground/80">
+                {mainText}
+              </p>
+              <a href={readMoreLink} className="mt-3 inline-block text-sm font-medium text-foreground underline decoration-from-font">
+                Read More
+              </a>
+            </motion.div>
         </div>
 
         {/* Build Bold Text (Left on mobile, Right on desktop) */}
@@ -138,7 +152,7 @@ export const MinimalistHero = ({
           initial={{ opacity: 0, x: 50 }}
           animate={isFinished ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 flex items-center justify-start text-left md:static md:translate-y-0 md:top-auto md:w-1/3 md:justify-start md:text-left"
+          className="absolute left-4 top-[35%] -translate-y-1/2 z-20 flex items-center justify-start text-left md:static md:translate-y-0 md:top-auto md:w-1/3 md:justify-start md:text-left"
         >
           <h1 className="text-4xl font-extrabold text-foreground sm:text-5xl md:text-8xl lg:text-9xl">
             {overlayText.part1}
